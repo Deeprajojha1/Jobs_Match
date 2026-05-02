@@ -1,0 +1,649 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5f7f8;
+  --foreground: #172026;
+  --muted: #5c6972;
+  --panel: #ffffff;
+  --line: #d9e1e5;
+  --primary: #0f766e;
+  --primary-dark: #115e59;
+  --accent: #d97706;
+  --danger: #b42318;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  min-width: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--background);
+}
+
+.page-loader-dots,
+.page-loader-dots > span {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row !important;
+  gap: 8px;
+}
+
+.app-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 170px 0 48px;
+}
+
+.topbar,
+.auth-panel,
+.workspace,
+.section-heading,
+.user-pill {
+  display: flex;
+  gap: 16px;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 100%;
+  max-width: 1180px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  padding: 28px 0 18px;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc((100vw - 100%) / -2);
+  z-index: -1;
+  background: var(--background);
+  border-bottom: 1px solid var(--line);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.auth-panel {
+  align-items: stretch;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 28px;
+}
+
+.auth-panel > div,
+.auth-panel > form {
+  flex: 1;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.workspace {
+  align-items: flex-start;
+}
+
+.left-column,
+.right-column {
+  display: grid;
+  gap: 16px;
+}
+
+.left-column {
+  flex: 1.05;
+}
+
+.right-column {
+  flex: 0.95;
+}
+
+.form-stack {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: #334047;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 11px 12px;
+  color: var(--foreground);
+  background: #fff;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+}
+
+.password-field input {
+  padding-right: 46px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  background: #edf2f4;
+  color: var(--foreground);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.primary,
+.segmented button,
+.user-pill button {
+  border: 0;
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-weight: 700;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.primary:hover {
+  background: var(--primary-dark);
+}
+
+.button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.button-content svg,
+.segmented button svg,
+.danger-button svg,
+.resume-button svg,
+.user-pill button svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  padding: 4px;
+  background: #edf2f4;
+  border-radius: 8px;
+}
+
+.segmented button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.segmented button.active {
+  background: #fff;
+  color: var(--foreground);
+  box-shadow: 0 1px 4px rgba(23, 32, 38, 0.1);
+}
+
+.user-pill {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+
+.user-pill span,
+.user-pill small {
+  display: block;
+}
+
+.user-pill small {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.user-pill button {
+  background: #edf2f4;
+}
+
+.section-heading {
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-heading span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.socket-status {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  padding: 5px 9px;
+  background: #edf2f4;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.socket-status.connected {
+  background: #e8f6ef;
+  color: #137547;
+}
+
+.socket-status.connecting {
+  background: #fff7e8;
+  color: #a15c00;
+}
+
+.socket-status.disconnected {
+  background: #fff1f0;
+  color: var(--danger);
+}
+
+.job-list,
+.application-list,
+.notification-list {
+  display: grid;
+  gap: 12px;
+}
+
+.job-card {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+  background: #f9fbfb;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.job-card-main {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.job-card.selected {
+  border-color: var(--primary);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.job-card span,
+.job-card small,
+.application-card span {
+  color: var(--muted);
+}
+
+.job-card p,
+.application-card p {
+  color: #40505a;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.danger-button {
+  justify-self: start;
+  border: 1px solid #ffcdc7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: #fff1f0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.danger-button:hover {
+  background: #ffe4e0;
+}
+
+.application-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.application-title-block {
+  display: grid;
+  gap: 4px;
+}
+
+.resume-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 9px 14px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.resume-button:hover {
+  background: #222;
+}
+
+.resume-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+}
+
+.match-box,
+.notification,
+.application-card {
+  display: grid;
+  gap: 6px;
+  background: #f9fbfb;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.message-composer,
+.candidate-messages {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 6px;
+  padding-top: 12px;
+}
+
+.message-composer .primary {
+  justify-self: start;
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.message-composer textarea {
+  margin-bottom: 4px;
+}
+
+.message-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--foreground);
+}
+
+.candidate-message {
+  display: grid;
+  gap: 5px;
+  border: 1px solid #dbe7ea;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fff;
+}
+
+.candidate-message span {
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.match-box strong,
+.application-card b,
+.notification b {
+  color: var(--primary);
+}
+
+.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.success {
+  color: #137547;
+  font-weight: 700;
+}
+
+.banner {
+  background: #fff1f0;
+  border: 1px solid #ffcdc7;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+}
+
+.success.banner {
+  background: #e8f6ef;
+  border-color: #bfe4cf;
+  margin-bottom: 0;
+}
+
+@media (max-width: 860px) {
+  .topbar,
+  .auth-panel,
+  .workspace {
+    flex-direction: column;
+  }
+
+  .app-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 250px;
+  }
+
+  .panel,
+  .auth-panel {
+    padding: 18px;
+  }
+
+  .application-card-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .resume-button,
+  .message-composer .primary,
+  .primary,
+  .danger-button {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: min(100% - 14px, 1180px);
+    padding: 170px 0 32px;
+  }
+
+  .topbar {
+    align-items: stretch;
+    gap: 10px;
+    width: calc(100% - 14px);
+    padding: 12px 0 10px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  .user-pill {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 8px;
+  }
+
+  .user-pill span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .user-pill small {
+    justify-self: end;
+  }
+
+  .user-pill button {
+    grid-column: 1 / -1;
+    min-height: 36px;
+    padding: 8px 12px;
+  }
+
+  .auth-panel,
+  .panel,
+  .job-card,
+  .application-card,
+  .notification,
+  .match-box {
+    border-radius: 6px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+  }
+
+  .job-card {
+    padding: 12px;
+  }
+
+  .job-card-main {
+    gap: 7px;
+  }
+
+  .segmented {
+    gap: 4px;
+  }
+
+  .segmented button,
+  .primary,
+  .danger-button,
+  .resume-button {
+    min-height: 42px;
+  }
+
+  .button-content {
+    white-space: normal;
+  }
+}
