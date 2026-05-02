@@ -5,7 +5,7 @@ import { registerUser, loginUser, getCurrentUser } from "../services/authService
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: "strict",
+  sameSite: isProduction ? "none" : "lax",
   path: "/",
 };
 
