@@ -14,10 +14,11 @@ import { Notifications } from "@/components/Notifications";
 import { useCandidateMessages } from "@/hooks/useCandidateMessages";
 import { useRecruiterNotifications } from "@/hooks/useRecruiterNotifications";
 import {
-  applicationResumeUrl,
   applicationsApi,
   authApi,
+  clearAccessToken,
   jobsApi,
+  openApplicationResume,
   type Application,
   type Job,
   type User,
@@ -112,11 +113,21 @@ export default function Home() {
   const handleLogout = async () => {
     try {
       await authApi.logout();
+      clearAccessToken();
       setUser(null);
       setApplications([]);
       toast.success("Logged out successfully");
     } catch (logoutError) {
       toast.error(logoutError instanceof Error ? logoutError.message : "Logout failed");
+    }
+  };
+
+  const handleOpenResume = async (applicationId: string) => {
+    try {
+      await openApplicationResume(applicationId);
+      toast.success("Opening resume");
+    } catch (resumeError) {
+      toast.error(resumeError instanceof Error ? resumeError.message : "Could not open resume");
     }
   };
 
@@ -254,16 +265,14 @@ export default function Home() {
                           <strong>{application.job?.title}</strong>
                           <span>{application.job?.company}</span>
                         </div>
-                        <a
+                        <button
                           className="resume-button"
-                          href={applicationResumeUrl(application._id)}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={() => toast.success("Opening resume")}
+                          type="button"
+                          onClick={() => handleOpenResume(application._id)}
                         >
                           <FiFileText aria-hidden="true" />
                           View resume
-                        </a>
+                        </button>
                       </div>
                       <b>{application.aiMatch.score}% match</b>
                       <p>Strengths: {application.aiMatch.strengths.join(", ") || "None returned"}</p>

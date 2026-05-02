@@ -1,6 +1,23 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
+const TOKEN_STORAGE_KEY = "jobmatch_access_token";
+
+export const setAccessToken = (token: string) => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+};
+
+export const clearAccessToken = () => {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+};
+
+const getAccessToken = () => {
+  if (typeof window === "undefined") return "";
+  return window.localStorage.getItem(TOKEN_STORAGE_KEY) || "";
+};
+
 export type User = {
   id: string;
   name: string;
@@ -41,6 +58,26 @@ export type Application = {
 export const applicationResumeUrl = (applicationId: string) =>
   `${API_BASE_URL}/api/applications/${applicationId}/resume`;
 
+export const openApplicationResume = async (applicationId: string) => {
+  const token = getAccessToken();
+  const response = await fetch(applicationResumeUrl(applicationId), {
+    credentials: "include",
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || "Could not open resume");
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  window.open(url, "_blank", "noopener,noreferrer");
+  window.setTimeout(() => window.URL.revokeObjectURL(url), 30000);
+};
+
 type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
@@ -60,6 +97,7 @@ const request = async <T>(path: string, options: RequestOptions = {}) => {
     credentials: "include",
     headers: {
       ...(isForm ? {} : { "Content-Type": "application/json" }),
+      ...(getAccessToken() ? { Authorization: `Bearer ${getAccessToken()}` } : {}),
       ...options.headers,
     },
     body: requestBody,
@@ -79,9 +117,9 @@ export const authApi = {
     email: string;
     password: string;
     role: "candidate" | "recruiter";
-  }) => request<{ user: User }>("/api/auth/register", { method: "POST", body: payload }),
+  }) => request<{ user: User; token: string }>("/api/auth/register", { method: "POST", body: payload }),
   login: (payload: { email: string; password: string }) =>
-    request<{ user: User }>("/api/auth/login", { method: "POST", body: payload }),
+    request<{ user: User; token: string }>("/api/auth/login", { method: "POST", body: payload }),
   logout: () => request<{ message: string }>("/api/auth/logout", { method: "POST" }),
   me: () => request<{ user: User }>("/api/auth/me"),
 };

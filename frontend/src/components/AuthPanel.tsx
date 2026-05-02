@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff, FiLogIn, FiUserPlus, FiUsers, FiUserCheck } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
-import { authApi, type User } from "@/services/api";
+import { authApi, setAccessToken, type User } from "@/services/api";
 
 type Props = {
   onAuthenticated: (user: User) => void;
@@ -37,6 +37,7 @@ export function AuthPanel({ onAuthenticated }: Props) {
             })
           : await authApi.login({ email, password });
 
+      setAccessToken(result.token);
       onAuthenticated(result.user);
       toast.success(mode === "login" ? "Logged in successfully" : "Account created successfully");
     } catch (error) {

@@ -11,7 +11,10 @@ type JwtPayload = {
 
 export const requireAuth = async (req: Request, _res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies?.accessToken;
+    const bearerToken = req.headers.authorization?.startsWith("Bearer ")
+      ? req.headers.authorization.slice("Bearer ".length)
+      : undefined;
+    const token = req.cookies?.accessToken || bearerToken;
     if (!token) {
       const error = new Error("Authentication required");
       error.statusCode = 401;

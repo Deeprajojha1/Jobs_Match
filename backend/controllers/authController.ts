@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   try {
     const { user, token } = await registerUser(req.body);
     res.cookie("accessToken", token, cookieOptions);
-    res.status(201).json({ user });
+    res.status(201).json({ user, token });
   } catch (error) {
     next(error);
   }
@@ -23,7 +23,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   try {
     const { user, token } = await loginUser(req.body);
     res.cookie("accessToken", token, cookieOptions);
-    res.json({ user });
+    res.json({ user, token });
   } catch (error) {
     next(error);
   }
